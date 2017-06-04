@@ -59,8 +59,7 @@
 #define HID_REPORT_TYPE_OUTPUT  2
 #define HID_REPORT_TYPE_FEATURE 3
 
-typedef struct
-{
+typedef struct {
   uint8_t len;      // 9
   uint8_t dtype;    // 0x21
   uint8_t addr;
@@ -72,15 +71,14 @@ typedef struct
   uint8_t descLenH;
 } HIDDescDescriptor;
 
-typedef struct 
-{
+typedef struct {
   InterfaceDescriptor hid;
   HIDDescDescriptor   desc;
   EndpointDescriptor  in;
 } HIDDescriptor;
 
 class HIDSubDescriptor {
-public:
+ public:
   HIDSubDescriptor *next = NULL;
   HIDSubDescriptor(const void *d, const uint16_t l) : data(d), length(l) { }
 
@@ -88,22 +86,21 @@ public:
   const uint16_t length;
 };
 
-class HID_ : public PluggableUSBModule
-{
-public:
+class HID_ : public PluggableUSBModule {
+ public:
   HID_(void);
   int begin(void);
   int SendReport(uint8_t id, const void* data, int len);
   void AppendDescriptor(HIDSubDescriptor* node);
 
-protected:
+ protected:
   // Implementation of the PluggableUSBModule
   int getInterface(uint8_t* interfaceCount);
   int getDescriptor(USBSetup& setup);
   bool setup(USBSetup& setup);
   uint8_t getShortName(char* name);
 
-private:
+ private:
   uint8_t epType[1];
 
   HIDSubDescriptor* rootNode;
