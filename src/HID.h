@@ -92,6 +92,7 @@ class HID_ : public PluggableUSBModule {
   int begin(void);
   int SendReport(uint8_t id, const void* data, int len);
   void AppendDescriptor(HIDSubDescriptor* node);
+  uint8_t getLEDs(void) { return setReportData.leds; };
 
  protected:
   // Implementation of the PluggableUSBModule
@@ -108,6 +109,10 @@ class HID_ : public PluggableUSBModule {
 
   uint8_t protocol;
   uint8_t idle;
+  struct {
+    uint8_t reportId;
+    uint8_t leds;
+  } setReportData;
 };
 
 // Replacement for global singleton.

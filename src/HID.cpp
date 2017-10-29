@@ -130,13 +130,11 @@ bool HID_::setup(USBSetup& setup) {
       return true;
     }
     if (request == HID_SET_REPORT) {
-      //uint8_t reportID = setup.wValueL;
-      //uint16_t length = setup.wLength;
-      //uint8_t data[length];
-      // Make sure to not read more data than USB_EP_SIZE.
-      // You can read multiple times through a loop.
-      // The first byte (may!) contain the reportID on a multreport.
-      //USB_RecvControl(data, length);
+      uint16_t length = setup.wLength;
+
+      if (length == sizeof(setReportData)) {
+        USB_RecvControl(&setReportData, length);
+      }
     }
   }
 
@@ -146,6 +144,8 @@ bool HID_::setup(USBSetup& setup) {
 HID_::HID_(void) : PluggableUSBModule(1, 1, epType),
   rootNode(NULL), descriptorSize(0),
   protocol(HID_REPORT_PROTOCOL), idle(1) {
+  setReportData.reportId = 0;
+  setReportData.leds = 0;
   epType[0] = EP_TYPE_INTERRUPT_IN;
   PluggableUSB().plug(this);
 }
