@@ -134,6 +134,9 @@ bool HID_::setup(USBSetup& setup) {
 
       if (length == sizeof(setReportData)) {
         USB_RecvControl(&setReportData, length);
+      } else if (length == sizeof(setReportData.leds)) {
+        USB_RecvControl(&setReportData.leds, length);
+        setReportData.reportId = 0;
       }
     }
   }
